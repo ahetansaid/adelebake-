@@ -1,11 +1,19 @@
 import type { Metadata, Viewport } from 'next';
-import { Cinzel, Cormorant_Garamond, Jost } from 'next/font/google';
+import localFont from 'next/font/local';
 import type { ReactNode } from 'react';
 
-// Polices auto-hébergées par Next (aucun appel à Google côté visiteur).
-const serif = Cormorant_Garamond({ subsets: ['latin'], weight: ['500', '600'], style: ['normal', 'italic'], variable: '--font-serif', display: 'swap' });
-const sans = Jost({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
-const logo = Cinzel({ subsets: ['latin'], weight: ['500', '600'], variable: '--font-logo', display: 'swap' });
+// Polices variables stockées dans le projet (src/fonts, licence OFL) :
+// aucun appel à Google, ni au build ni côté visiteur.
+const serif = localFont({
+  src: [
+    { path: '../fonts/cormorant.woff2', weight: '500 600', style: 'normal' },
+    { path: '../fonts/cormorant-italic.woff2', weight: '500 600', style: 'italic' },
+  ],
+  variable: '--font-serif',
+  display: 'swap',
+});
+const sans = localFont({ src: '../fonts/jost.woff2', weight: '400 600', variable: '--font-sans', display: 'swap' });
+const logo = localFont({ src: '../fonts/cinzel.woff2', weight: '500 600', variable: '--font-logo', display: 'swap' });
 
 const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000';
 

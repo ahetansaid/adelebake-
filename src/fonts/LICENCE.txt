@@ -1,0 +1,5 @@
+Polices sous licence SIL Open Font License 1.1 (usage commercial et auto-hébergement autorisés) :
+- Cormorant Garamond — Christian Thalmann (Catharsis Fonts)
+- Jost — Owen Earl (indestructible type*)
+- Cinzel — Natanael Gama
+Fichiers WOFF2 variables, sous-ensemble latin, issus de Google Fonts.
