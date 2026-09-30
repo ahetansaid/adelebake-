@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adélé Baké — Trois propositions de site</title>
+<meta name="description" content="Trois directions de design pour le site d'Adélé Baké, guesthouse et salle de conférence à Cotonou.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Fraunces:ital,opsz,wght@1,9..144,700&family=DM+Serif+Display&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1A120D;--bg-2:#241913;--line:#3A2A20;--txt:#F3E6D8;--mute:#BFA894;--copper:#C9854F;--copper-l:#E3B48A;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font:400 1rem/1.65 Jost,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+::selection{background:var(--copper);color:#1A120D}
+:focus-visible{outline:2px solid var(--copper-l);outline-offset:3px;border-radius:6px}
+a{color:inherit}
+.wrap{width:min(1200px,100% - 32px);margin-inline:auto}
+header{padding:64px 0 40px;text-align:center}
+header h1{font:500 clamp(2.2rem,5vw,3.6rem)/1.1 "Cormorant Garamond",serif;margin:28px 0 12px;letter-spacing:-.01em}
+header h1 em{color:var(--copper-l)}
+header p{color:var(--mute);max-width:62ch;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:24px 0 60px}
+.card{display:flex;flex-direction:column;background:var(--bg-2);border:1px solid var(--line);border-radius:18px;overflow:hidden;text-decoration:none;transition:transform .4s var(--ease),box-shadow .4s var(--ease),border-color .4s}
+.card:hover{transform:translateY(-6px);box-shadow:0 30px 60px rgba(0,0,0,.45);border-color:#5A4030}
+.shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:#000}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.shot .n{position:absolute;left:14px;top:14px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--copper);color:#1A120D;font:600 1.05rem Jost}
+.body{padding:22px 24px 26px;display:flex;flex-direction:column;gap:12px;flex:1}
+.body h2{margin:0;font-size:1.9rem;line-height:1.1}
+.v1 h2{font-family:"Cormorant Garamond",serif;font-weight:600}
+.v2 h2{font-family:Fraunces,serif;font-style:italic;font-weight:700}
+.v3 h2{font-family:"DM Serif Display",serif;font-weight:400}
+.body p{margin:0;color:var(--mute);font-size:.94rem}
+.sw{display:flex;gap:6px}
+.sw i{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.12)}
+dl{margin:4px 0 0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.86rem}
+dt{color:var(--copper-l)}dd{margin:0;color:var(--txt)}
+.go{margin-top:auto;padding-top:8px;display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--copper-l)}
+.go span{transition:transform .3s var(--ease)}
+.card:hover .go span{transform:translateX(5px)}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding-bottom:80px}
+.info section{border:1px solid var(--line);border-radius:18px;padding:26px 28px}
+.info h3{font:600 1.5rem "Cormorant Garamond",serif;margin:0 0 10px;color:var(--copper-l)}
+.info ul{margin:0;padding-left:1.1em;color:var(--mute);font-size:.94rem}
+.info li{margin-bottom:6px}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mute);font-size:.8rem;text-align:center}
+@media (max-width:960px){.grid,.info{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.card,.go span{transition:none}}
+</style>
+</head>
+<body data-no-switcher>
+<header class="wrap">
+  <span data-logo="light" data-layout="stack"></span>
+  <h1>Trois propositions pour <em>le nouveau site</em></h1>
+  <p>Trois directions différentes, toutes aux couleurs du logo et ancrées au Bénin. Ouvrez chacune sur ordinateur et sur téléphone, puis dites-nous laquelle vous ressemble le plus — on peut aussi combiner des éléments.</p>
+</header>
+
+<main class="wrap grid">
+  <a class="card v1" href="/v1/">
+    <div class="shot"><img src="/assets/preview-v1.jpg" alt="Aperçu de la proposition 1"><span class="n">1</span></div>
+    <div class="body">
+      <h2>Signature</h2>
+      <p>Élégante et rassurante, esprit hôtel de charme. Grand diaporama, réservation visible immédiatement, panneaux indigo.</p>
+      <div class="sw"><i style="background:#1F2B45"></i><i style="background:#B8733F"></i><i style="background:#E3B48A"></i><i style="background:#FBF5EE"></i></div>
+      <dl><dt>Pour qui</dt><dd>Clientèle d'affaires, ONG, voyageurs exigeants</dd><dt>Animation</dt><dd>Changement d'image en volet depuis les vignettes</dd></dl>
+      <span class="go">Voir la proposition <span>→</span></span>
+    </div>
+  </a>
+  <a class="card v2" href="/v2/">
+    <div class="shot"><img src="/assets/preview-v2.jpg" alt="Aperçu de la proposition 2"><span class="n">2</span></div>
+    <div class="body">
+      <h2>Soleil de Cotonou</h2>
+      <p>Fidèle à la référence « Leychert » : bande jaune incurvée, accès rapides en pastilles, chambres, agenda de la maison et plan du quartier.</p>
+      <div class="sw"><i style="background:#15315B"></i><i style="background:#F4C35C"></i><i style="background:#C63B2B"></i><i style="background:#FFFFFF"></i></div>
+      <dl><dt>Pour qui</dt><dd>Familles, diaspora, voyageurs curieux</dd><dt>Animation</dt><dd>La bande se creuse, les pastilles s'y posent, le repère tombe sur le plan</dd></dl>
+      <span class="go">Voir la proposition <span>→</span></span>
+    </div>
+  </a>
+  <a class="card v3" href="/v3/">
+    <div class="shot"><img src="/assets/preview-v3.jpg" alt="Aperçu de la proposition 3"><span class="n">3</span></div>
+    <div class="body">
+      <h2>Maison tropicale</h2>
+      <p>Fidèle à la référence « Palm &amp; Coast » : vagues, arches, bandeau sarcelle, palmes et monstera, réservation en 4 étapes.</p>
+      <div class="sw"><i style="background:#0F4C4A"></i><i style="background:#EC7B5C"></i><i style="background:#DDEDEA"></i><i style="background:#F8F4EE"></i></div>
+      <dl><dt>Pour qui</dt><dd>Séjours détente, couples, séminaires</dd><dt>Animation</dt><dd>Les étapes de réservation s'allument au défilement</dd></dl>
+      <span class="go">Voir la proposition <span>→</span></span>
+    </div>
+  </a>
+</main>
+
+<div class="wrap info">
+  <section>
+    <h3>Communs aux trois</h3>
+    <ul>
+      <li>Logo, couleurs cuivre et baseline « Guesthouse &amp; Conference Venue ».</li>
+      <li>Réservation directe par WhatsApp (message pré-rempli), appel ou e-mail.</li>
+      <li>Salle de conférence mise en avant, cuisine béninoise, navette aéroport.</li>
+      <li>Adaptées au téléphone et respectueuses du réglage « réduire les animations ».</li>
+    </ul>
+  </section>
+  <section>
+    <h3>À fournir par Adélé Baké</h3>
+    <ul>
+      <li>Vraies photos de la maison (les photos actuelles sont des illustrations Pexels).</li>
+      <li>Liste des chambres, tarifs, capacité de la salle, menu.</li>
+      <li>Numéro WhatsApp, adresse exacte, horaires d'accueil.</li>
+      <li>Logo en haute définition (SVG ou PNG) et vrais avis clients.</li>
+    </ul>
+  </section>
+</div>
+
+<footer>Maquettes réalisées par Drwintech · Photos d'illustration : Pexels · Contenus indicatifs</footer>
+<script src="/assets/brand.js"></script>
+</body>
+</html>
