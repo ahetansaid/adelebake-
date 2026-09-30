@@ -64,15 +64,29 @@ Hors site (le plus décisif en local) : fiche **Google Business Profile** (caté
 mêmes nom/adresse/téléphone que le site, photos, lien vers le site, avis clients), fiches Tripadvisor
 (fusionner les deux fiches existantes), Booking.com, Facebook/Instagram pointant vers le site.
 
-## Mise en production — à faire
+## Production (Vercel + Neon)
 
-1. **Base** : PostgreSQL managé (Neon, comme le portfolio) ou sur le VPS ; `npm run db:deploy` puis `npm run db:seed`.
-2. **Variables** : `DATABASE_URL`, `SITE_URL` (URL définitive), `AUTH_SECRET` (nouveau, 48 caractères aléatoires),
-   `SMTP_*` + `MAIL_FROM` sur le domaine `adelebake.com` avec SPF/DKIM/DMARC, puis `ALLOW_INDEXING=true` le jour J.
-3. **Hébergement** : Vercel ou VPS1 (Node 22 + reverse proxy nginx). Sur Vercel, une requête est limitée à 4,5 Mo :
-   envoyer des photos de moins de 4 Mo depuis le back-office.
-4. **Avant le lancement**, remplacer les contenus indicatifs : photos réelles, tarifs, capacité de la salle, horaires,
-   numéro WhatsApp, mentions légales (RCCM, IFU, hébergeur) et **supprimer les 3 avis d'exemple**.
+- Projet Vercel **`adelebake`**, fonctions en `fra1` ; base **Neon** `adelebake-db` (Francfort, `eu-central-1`),
+  connectée via la marketplace Vercel (`DATABASE_URL` poolée + `DATABASE_URL_UNPOOLED` pour les migrations).
+- En ligne sur https://adelebake.vercel.app (non indexé tant que `ALLOW_INDEXING` n'est pas activé).
+- Déployer : `vercel deploy --prod` · migrations : `DATABASE_URL_UNPOOLED=… npx prisma migrate deploy`.
+- `www.adelebake.com` redirige (308) vers `adelebake.com` (`vercel.json`).
+- Photos : limite Vercel de 4,5 Mo par requête → envoyer des photos de moins de 4 Mo depuis le back-office.
+
+### Bascule du domaine (DNS chez Wix — ne pas changer les serveurs de noms)
+
+| Nom | Type | Valeur actuelle (Wix) | Nouvelle valeur (Vercel) |
+|---|---|---|---|
+| `@` | A | 185.230.63.107 / .171 / .186 | **216.198.79.1** et **64.29.17.1** |
+| `www` | CNAME | cdn1.wixdns.net | **46066f163fdc86fa.vercel-dns-017.com** |
+
+1. La veille : TTL de ces enregistrements au minimum proposé par Wix.
+2. Jour J : remplacer les valeurs ci-dessus, puis `vercel domains verify adelebake.com` (certificat émis automatiquement).
+3. Passer `SITE_URL=https://adelebake.com`, `ALLOW_INDEXING=true`, redéployer ; soumettre le sitemap à Search Console.
+4. Contrôle : `curl -I https://adelebake.com` et `https://www.adelebake.com` (redirection 308).
+
+**Messagerie** : le domaine n'a aucun MX — `contact@adelebake.com` ne reçoit rien tant qu'une messagerie n'est pas créée
+(Google Workspace, Zoho…) avec MX/SPF/DKIM/DMARC ; renseigner ensuite `SMTP_*` et `MAIL_FROM` sur Vercel.
 
 ## Contenus à valider avec l'établissement
 
