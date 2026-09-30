@@ -50,6 +50,20 @@ carte du restaurant, excursions, avis clients, coordonnées & infos du site, com
 - `robots.txt` bloque toute indexation tant que `ALLOW_INDEXING=true` n'est pas défini (à activer au lancement officiel).
 - Aucun secret dans le code : tout passe par `.env` (non versionné).
 
+## Référencement (SEO)
+
+Dans le code : titres/descriptions ciblés par page, URL canonique partout, image d'aperçu (`/opengraph-image`),
+sitemap, fil d'Ariane, FAQ, et données structurées JSON-LD (Hotel, HotelRoom + prix, Restaurant + menu,
+salle de réunion, excursions, FAQPage). Vérification : [Rich Results Test](https://search.google.com/test/rich-results).
+
+Au lancement : `ALLOW_INDEXING=true`, `SITE_URL` = domaine définitif, codes `GOOGLE_SITE_VERIFICATION` /
+`BING_SITE_VERIFICATION`, puis soumettre `https://<domaine>/sitemap.xml` dans Search Console et Bing Webmaster Tools.
+Renseigner la position GPS exacte dans *Coordonnées & infos* (espace de gestion).
+
+Hors site (le plus décisif en local) : fiche **Google Business Profile** (catégorie « Maison d'hôtes »,
+mêmes nom/adresse/téléphone que le site, photos, lien vers le site, avis clients), fiches Tripadvisor
+(fusionner les deux fiches existantes), Booking.com, Facebook/Instagram pointant vers le site.
+
 ## Mise en production — à faire
 
 1. **Base** : PostgreSQL managé (Neon, comme le portfolio) ou sur le VPS ; `npm run db:deploy` puis `npm run db:seed`.
