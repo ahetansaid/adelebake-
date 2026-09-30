@@ -1,6 +1,19 @@
 import 'server-only';
-import sharp from 'sharp';
+import type { OutputInfo } from 'sharp';
 import { db } from './db';
+
+/**
+ * sharp est chargé à la demande : si son binaire manquait sur l'hébergement,
+ * seul l'envoi de photos échouerait, jamais l'affichage des pages du back-office.
+ */
+async function loadSharp() {
+  try {
+    return (await import('sharp')).default;
+  } catch (err) {
+    console.error('[media] module sharp indisponible', (err as Error).message);
+    throw new Error("Le traitement des photos est momentanément indisponible. Réessayez plus tard ou contactez le support.");
+  }
+}
 
 export const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 const ALLOWED = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
@@ -18,7 +31,8 @@ export async function storeImage(file: File, alt?: string) {
 }
 
 export async function storeImageBuffer(input: Buffer, filename: string, alt?: string) {
-  let out: { data: Buffer; info: sharp.OutputInfo };
+  const sharp = await loadSharp();
+  let out: { data: Buffer; info: OutputInfo };
   try {
     out = await sharp(input)
       .rotate()

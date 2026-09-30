@@ -44,5 +44,9 @@
     "prisma": "^6.19.3",
     "tsx": "^4.20.0",
     "typescript": "^5.9.0"
+  },
+  "optionalDependencies": {
+    "@img/sharp-libvips-linux-x64": "1.2.4",
+    "@img/sharp-linux-x64": "0.34.5"
   }
 }
