@@ -1,0 +1,48 @@
+{
+  "name": "adelebake",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Site et back-office d'Adélé Baké — guesthouse et salle de conférence à Cotonou",
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate",
+    "db:up": "docker compose up -d",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio",
+    "admin:create": "tsx --env-file=.env scripts/create-admin.ts"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.12",
+    "lucide-react": "^1.49.0",
+    "next": "^15.5.26",
+    "nodemailer": "^7.0.13",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "server-only": "^0.0.1",
+    "sharp": "^0.34.5",
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.0",
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^7.0.12",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^15.5.26",
+    "prisma": "^6.19.3",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0"
+  }
+}

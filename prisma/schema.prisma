@@ -1,0 +1,244 @@
+// Adélé Baké — schéma de données (PostgreSQL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- Administration ----------
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique @db.VarChar(255)
+  name         String    @db.VarChar(120)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  lastLoginAt  DateTime? @map("last_login_at")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@map("admin_users")
+}
+
+/// Paramètres du site (coordonnées, horaires, réseaux…), en clé/valeur.
+model Setting {
+  key       String   @id @db.VarChar(80)
+  value     String
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+/// Limitation de débit des formulaires publics et de la connexion.
+model RateLimit {
+  key     String   @id @db.VarChar(160)
+  count   Int
+  resetAt DateTime @map("reset_at")
+
+  @@map("rate_limits")
+}
+
+// ---------- Médias (photos stockées en base, hors racine web) ----------
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String   @db.VarChar(255)
+  mimeType  String   @map("mime_type") @db.VarChar(60)
+  width     Int
+  height    Int
+  size      Int
+  data      Bytes
+  alt       String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  roomCovers       Room[]       @relation("RoomCover")
+  roomImages       RoomImage[]
+  experienceImages Experience[]
+
+  @@map("media")
+}
+
+// ---------- Contenus ----------
+
+model Room {
+  id            String      @id @default(cuid())
+  slug          String      @unique @db.VarChar(120)
+  name          String      @db.VarChar(120)
+  summary       String      @db.VarChar(300)
+  description   String
+  pricePerNight Int         @map("price_per_night") /// en FCFA
+  capacity      Int         @default(2)
+  bedType       String      @map("bed_type") @db.VarChar(80)
+  sizeM2        Int?        @map("size_m2")
+  amenities     String[]
+  coverId       String?     @map("cover_id")
+  cover         Media?      @relation("RoomCover", fields: [coverId], references: [id], onDelete: SetNull)
+  images        RoomImage[]
+  published     Boolean     @default(true)
+  sortOrder     Int         @default(0) @map("sort_order")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  bookings      BookingRequest[]
+
+  @@map("rooms")
+}
+
+model RoomImage {
+  id        String @id @default(cuid())
+  roomId    String @map("room_id")
+  room      Room   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  mediaId   String @map("media_id")
+  media     Media  @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  sortOrder Int    @default(0) @map("sort_order")
+
+  @@index([roomId])
+  @@map("room_images")
+}
+
+enum MenuSection {
+  PETIT_DEJEUNER
+  BENINOIS
+  GRILLADES
+  BOISSONS
+}
+
+model MenuItem {
+  id          String      @id @default(cuid())
+  section     MenuSection
+  name        String      @db.VarChar(120)
+  description String?     @db.VarChar(400)
+  price       Int? /// en FCFA ; vide = « sur demande »
+  featured    Boolean     @default(false)
+  published   Boolean     @default(true)
+  sortOrder   Int         @default(0) @map("sort_order")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@index([section, sortOrder])
+  @@map("menu_items")
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  slug        String   @unique @db.VarChar(120)
+  title       String   @db.VarChar(120)
+  summary     String   @db.VarChar(300)
+  description String
+  schedule    String?  @db.VarChar(120) /// ex. « Chaque samedi »
+  price       Int? /// en FCFA par personne
+  imageId     String?  @map("image_id")
+  image       Media?   @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("experiences")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  author    String   @db.VarChar(120)
+  origin    String?  @db.VarChar(120)
+  quote     String   @db.VarChar(800)
+  rating    Int?
+  isExample Boolean  @default(false) @map("is_example") /// avis fictif de démonstration
+  published Boolean  @default(true)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+// ---------- Demandes reçues ----------
+
+enum BookingStatus {
+  NEW
+  CONFIRMED
+  DECLINED
+  CANCELLED
+}
+
+model BookingRequest {
+  id             String        @id @default(cuid())
+  reference      String        @unique @db.VarChar(20)
+  roomId         String?       @map("room_id")
+  room           Room?         @relation(fields: [roomId], references: [id], onDelete: SetNull)
+  checkIn        DateTime      @map("check_in") @db.Date
+  checkOut       DateTime      @map("check_out") @db.Date
+  adults         Int
+  children       Int           @default(0)
+  name           String        @db.VarChar(120)
+  email          String        @db.VarChar(255)
+  phone          String        @db.VarChar(40)
+  message        String?       @db.VarChar(2000)
+  airportShuttle Boolean       @default(false) @map("airport_shuttle")
+  flightInfo     String?       @map("flight_info") @db.VarChar(120)
+  status         BookingStatus @default(NEW)
+  adminNotes     String?       @map("admin_notes")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("booking_requests")
+}
+
+enum EventFormat {
+  HALF_DAY
+  FULL_DAY
+  MULTI_DAY
+}
+
+enum QuoteStatus {
+  NEW
+  QUOTED
+  WON
+  LOST
+}
+
+model ConferenceRequest {
+  id           String      @id @default(cuid())
+  reference    String      @unique @db.VarChar(20)
+  organization String?     @db.VarChar(160)
+  name         String      @db.VarChar(120)
+  email        String      @db.VarChar(255)
+  phone        String      @db.VarChar(40)
+  eventDate    DateTime    @map("event_date") @db.Date
+  format       EventFormat
+  participants Int
+  needs        String[]
+  lodging      Boolean     @default(false)
+  message      String?     @db.VarChar(2000)
+  status       QuoteStatus @default(NEW)
+  adminNotes   String?     @map("admin_notes")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("conference_requests")
+}
+
+enum MessageStatus {
+  NEW
+  READ
+  ANSWERED
+  ARCHIVED
+}
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  name      String        @db.VarChar(120)
+  email     String        @db.VarChar(255)
+  phone     String?       @db.VarChar(40)
+  subject   String        @db.VarChar(160)
+  message   String        @db.VarChar(4000)
+  status    MessageStatus @default(NEW)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}

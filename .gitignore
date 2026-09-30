@@ -1,2 +1,15 @@
-.vercel
+# dépendances et build
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# environnement et secrets
 .env*
+!.env.example
+.vercel
+
+# divers
+npm-debug.log*
+.DS_Store
