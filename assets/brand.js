@@ -1,5 +1,5 @@
-/* Adélé Baké — éléments partagés par les trois propositions :
-   logo recréé en SVG (d'après le logo fourni) et barre de navigation entre maquettes. */
+/* Adélé Baké — logo recréé en SVG (d'après le logo fourni, en attendant la version vectorielle officielle).
+   Usage : <a data-logo="light|dark" data-layout="row|stack"></a> */
 (function () {
   const COPPER = ['#D39A67', '#A8643A', '#7C4424'];
 
@@ -34,19 +34,6 @@
       <span class="ab-word"><span class="ab-name">Adélé Baké</span><span class="ab-tag">Guesthouse &amp; Conference Venue</span></span>`;
   });
 
-  // Barre flottante : passer d'une proposition à l'autre pendant la revue.
-  if (!document.body.hasAttribute('data-no-switcher')) {
-    const here = location.pathname.replace(/\/index\.html$/, '/').replace(/\/$/, '');
-    const items = [['/v1', '1'], ['/v2', '2'], ['/v3', '3']];
-    const bar = document.createElement('nav');
-    bar.className = 'ab-switch';
-    bar.setAttribute('aria-label', 'Propositions');
-    bar.innerHTML =
-      `<a href="/" class="ab-switch__all">Toutes les propositions</a>` +
-      items.map(([h, l]) => `<a href="${h}/" ${here.endsWith(h) ? 'aria-current="page"' : ''}>${l}</a>`).join('');
-    document.body.appendChild(bar);
-  }
-
   const css = `
   .ab-logo{display:inline-flex;align-items:center;gap:.7rem;text-decoration:none;color:inherit;line-height:1}
   .ab-logo--stack{flex-direction:column;gap:.45rem;text-align:center}
@@ -57,15 +44,6 @@
   .ab-tag{font-family:inherit;font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;opacity:.8;white-space:nowrap}
   .ab-logo--dark .ab-name{color:#4A2A18}.ab-logo--dark .ab-tag{color:#7C4424}
   .ab-logo--light .ab-name{color:#FBEBDC}.ab-logo--light .ab-tag{color:#F0CFAF}
-  .ab-logo--teal .ab-name{color:#0F4C4A}.ab-logo--teal .ab-tag{color:#3E6E69}
-  .ab-switch{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:9999;display:flex;gap:4px;padding:5px;
-    background:rgba(30,18,11,.9);border-radius:999px;box-shadow:0 8px 28px rgba(0,0,0,.28);font:500 12px/1 system-ui,sans-serif;
-    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-  .ab-switch a{color:#F3DCC6;text-decoration:none;padding:8px 12px;border-radius:999px;transition:background .2s}
-  .ab-switch a:hover{background:rgba(255,255,255,.1)}
-  .ab-switch a[aria-current]{background:#C9854F;color:#1E120B}
-  .ab-switch__all{white-space:nowrap}
-  @media (max-width:420px){.ab-switch__all{font-size:0}.ab-switch__all::before{content:"Toutes";font-size:12px}}
   `;
   const style = document.createElement('style');
   style.textContent = css;
