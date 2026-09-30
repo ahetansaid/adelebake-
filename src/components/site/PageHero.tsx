@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { breadcrumbList, ldJson } from '@/lib/seo';
 
 type Crumb = { href?: string; label: string };
 
@@ -8,6 +9,8 @@ export function PageHero({ title, lead, image, alt = '', crumbs = [] }: {
 }) {
   return (
     <section className="phero">
+      {/* Fil d'Ariane lisible par Google (affiché dans les résultats de recherche) */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(breadcrumbList(crumbs.map((c) => ({ name: c.label, path: c.href }))))} />
       <Image src={image} alt={alt} fill priority sizes="100vw" />
       <div className="wrap phero__in">
         <nav className="crumbs" aria-label="Fil d'Ariane">

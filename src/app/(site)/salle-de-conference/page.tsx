@@ -5,17 +5,36 @@ import { ConferenceForm } from '@/components/site/ConferenceForm';
 import { PageHero } from '@/components/site/PageHero';
 import { IMG } from '@/content/images';
 import { todayIso } from '@/lib/content';
+import { absolute, businessRef, geo, ldJson, postalAddress } from '@/lib/seo';
 import { getSettings } from '@/lib/settings';
 
 export const metadata: Metadata = {
-  title: 'Salle de conférence',
-  description: 'Salle de réunion climatisée et équipée à Cotonou, près de l’aéroport : séminaires, formations, ateliers. Pauses, repas et hébergement sur place.',
+  title: 'Salle de conférence et séminaires à Cotonou',
+  description: "Salle de réunion climatisée et équipée près de l'aéroport de Cotonou : séminaires, formations et ateliers. Pauses, repas et hébergement sur place.",
+  alternates: { canonical: '/salle-de-conference' },
 };
 
 export default async function ConferencePage() {
   const s = await getSettings();
+  const capacity = Number.parseInt(s.conferenceCapacity, 10);
+  const venueLd = {
+    '@context': 'https://schema.org',
+    '@type': ['EventVenue', 'MeetingRoom'],
+    '@id': absolute('/salle-de-conference#salle'),
+    name: 'Salle de conférence Adélé Baké',
+    description: 'Salle de réunion climatisée et équipée à Cotonou, près de l’aéroport : séminaires, formations, ateliers, avec restauration et hébergement sur place.',
+    url: absolute('/salle-de-conference'),
+    telephone: s.phone,
+    address: postalAddress(s),
+    ...(geo(s) ? { geo: geo(s) } : {}),
+    ...(Number.isFinite(capacity) ? { maximumAttendeeCapacity: capacity } : {}),
+    amenityFeature: ['Vidéoprojecteur', 'Sonorisation', 'Wi-Fi haut débit', 'Climatisation', 'Restauration sur place', 'Hébergement sur place']
+      .map((name) => ({ '@type': 'LocationFeatureSpecification', name, value: true })),
+    containedInPlace: businessRef(),
+  };
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(venueLd)} />
       <PageHero
         title="Salle de conférence"
         lead="Réunions, formations, séminaires : un cadre calme et équipé, avec restauration et hébergement sur place."

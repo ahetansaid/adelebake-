@@ -6,8 +6,9 @@ import { IMG } from '@/content/images';
 import { getSettings, whatsappLink } from '@/lib/settings';
 
 export const metadata: Metadata = {
-  title: 'Contact',
-  description: 'Contactez Adélé Baké à Cotonou : WhatsApp, téléphone, e-mail ou formulaire. Navette depuis l’aéroport offerte.',
+  title: 'Contact et accès',
+  description: "Contactez Adélé Baké à Cotonou par WhatsApp, téléphone ou e-mail. À 2 km de l'aéroport, navette offerte. Accueil tous les jours.",
+  alternates: { canonical: '/contact' },
 };
 
 export default async function ContactPage() {

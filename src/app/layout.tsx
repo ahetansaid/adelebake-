@@ -15,7 +15,15 @@ export const metadata: Metadata = {
   description:
     "Maison d'hôtes à taille humaine au cœur de Cotonou, à 2 km de l'aéroport : chambres climatisées, cuisine béninoise, salle de conférence et navette aéroport offerte.",
   applicationName: 'Adélé Baké',
+  alternates: { canonical: '/' },
   openGraph: { type: 'website', locale: 'fr_FR', siteName: 'Adélé Baké' },
+  twitter: { card: 'summary_large_image' },
+  formatDetection: { telephone: false },
+  // Codes fournis par Google Search Console / Bing Webmaster Tools (méthode « balise HTML »)
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.BING_SITE_VERIFICATION ? { 'msvalidate.01': process.env.BING_SITE_VERIFICATION } : undefined,
+  },
 };
 
 export const viewport: Viewport = { themeColor: '#1F2B45' };

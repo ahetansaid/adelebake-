@@ -10,6 +10,7 @@ const GROUPS: { title: string; keys: SettingKey[] }[] = [
   { title: 'Adresse & horaires', keys: ['address', 'airportDistance', 'receptionHours', 'checkIn', 'checkOut'] },
   { title: 'Salle de conférence', keys: ['conferenceCapacity'] },
   { title: 'Liens', keys: ['facebook', 'instagram', 'mapsUrl'] },
+  { title: 'Position GPS (référencement local)', keys: ['latitude', 'longitude'] },
 ];
 
 export default async function SettingsPage() {

@@ -16,6 +16,8 @@ export const SETTING_DEFAULTS = {
   facebook: 'https://www.facebook.com/adelebake229/',
   instagram: 'https://www.instagram.com/adelebake/',
   mapsUrl: 'https://www.google.com/maps/search/Adele+Bake+Cotonou',
+  latitude: '', // coordonnées GPS exactes (référencement local) — à relever sur Google Maps
+  longitude: '',
 } as const;
 
 export type SettingKey = keyof typeof SETTING_DEFAULTS;
@@ -35,6 +37,8 @@ export const SETTING_LABELS: Record<SettingKey, string> = {
   facebook: 'Page Facebook',
   instagram: 'Compte Instagram',
   mapsUrl: 'Lien Google Maps',
+  latitude: 'Latitude GPS (ex. 6.3571)',
+  longitude: 'Longitude GPS (ex. 2.3902)',
 };
 
 /** Lecture groupée, mise en cache le temps d'une requête. */

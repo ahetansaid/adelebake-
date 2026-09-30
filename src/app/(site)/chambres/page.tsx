@@ -9,8 +9,9 @@ import { getSettings } from '@/lib/settings';
 
 export const revalidate = 300;
 export const metadata: Metadata = {
-  title: 'Chambres',
-  description: "Chambres climatisées avec salle de bain privée, Wi-Fi et petit-déjeuner béninois, à 2 km de l'aéroport de Cotonou.",
+  title: "Chambres climatisées près de l'aéroport",
+  description: "Chambres climatisées avec salle de bain privée, Wi-Fi et petit-déjeuner béninois, à 2 km de l'aéroport de Cotonou. Navette offerte. Dès 35 000 FCFA la nuit.",
+  alternates: { canonical: '/chambres' },
 };
 
 export default async function RoomsPage() {

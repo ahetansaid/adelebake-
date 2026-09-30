@@ -8,12 +8,15 @@ import { BookingBar } from '@/components/site/BookingBar';
 import { HeroSlider } from '@/components/site/HeroSlider';
 import { RoomCard } from '@/components/site/RoomCard';
 import { Testimonials } from '@/components/site/Testimonials';
+import { faqItems } from '@/content/faq';
 import { HERO_SLIDES, IMG } from '@/content/images';
 import { menuBySection, publishedExperiences, publishedRooms, publishedTestimonials, todayIso } from '@/lib/content';
 import { mediaUrl } from '@/lib/media-url';
+import { absolute, businessRef, geo, ldJson, postalAddress, SITE_FULL_NAME } from '@/lib/seo';
 import { getSettings } from '@/lib/settings';
 
 export const revalidate = 300;
+export const metadata = { alternates: { canonical: '/' } };
 
 const AMENITIES = [
   { icon: PlaneLanding, label: 'Navette aéroport offerte' },
@@ -33,27 +36,53 @@ export default async function HomePage() {
     getSettings(), publishedRooms(3), publishedTestimonials(), menuBySection(), publishedExperiences(3),
   ]);
 
-  const jsonLd = {
+  const faq = faqItems(s);
+  const hour = (t: string) => { const m = t.match(/(\d{1,2})\s*h\s*(\d{2})?/); return m ? `${m[1].padStart(2, '0')}:${m[2] ?? '00'}` : undefined; };
+  const minPrice = rooms.length ? Math.min(...rooms.map((r) => r.pricePerNight)) : null;
+
+  // Fiche établissement : référence commune (@id) pour la chambre, le restaurant et la salle
+  const hotelLd = {
     '@context': 'https://schema.org',
-    '@type': 'Hotel',
-    name: 'Adélé Baké — Guesthouse & Conference Venue',
-    description: "Maison d'hôtes et salle de conférence à Cotonou, près de l'aéroport.",
-    url: process.env.SITE_URL,
+    '@type': ['Hotel', 'LodgingBusiness'],
+    '@id': businessRef()['@id'],
+    name: SITE_FULL_NAME,
+    alternateName: ['Adélé Baké', 'Adélé Baké Guesthouse', 'Résidence Adélé Baké'],
+    description: "Maison d'hôtes à taille humaine à Cotonou, à 2 km de l'aéroport : chambres climatisées, cuisine béninoise, salle de conférence et navette aéroport offerte.",
+    url: absolute('/'),
+    logo: absolute('/icon.svg'),
+    image: HERO_SLIDES.map((sl) => sl.src),
     telephone: s.phone,
     email: s.email,
-    address: { '@type': 'PostalAddress', streetAddress: s.address, addressLocality: 'Cotonou', addressCountry: 'BJ' },
+    address: postalAddress(s),
+    ...(geo(s) ? { geo: geo(s) } : {}),
+    hasMap: s.mapsUrl,
+    sameAs: [s.facebook, s.instagram].filter(Boolean),
+    ...(hour(s.checkIn) ? { checkinTime: hour(s.checkIn) } : {}),
+    ...(hour(s.checkOut) ? { checkoutTime: hour(s.checkOut) } : {}),
+    ...(minPrice ? { priceRange: `À partir de ${minPrice} XOF / nuit`, currenciesAccepted: 'XOF' } : {}),
+    availableLanguage: ['fr', 'en'],
     amenityFeature: AMENITIES.map((a) => ({ '@type': 'LocationFeatureSpecification', name: a.label, value: true })),
-    priceRange: rooms.length ? `à partir de ${Math.min(...rooms.map((r) => r.pricePerNight))} XOF` : undefined,
+    containsPlace: [{ '@id': absolute('/la-table#restaurant') }, { '@id': absolute('/salle-de-conference#salle') }],
+    potentialAction: { '@type': 'ReserveAction', target: absolute('/reservation') },
+  };
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
   };
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(hotelLd)} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(faqLd)} />
 
       <section className="hero" aria-label="Présentation">
         <HeroSlider slides={HERO_SLIDES} />
         <div className="hero__copy wrap">
-          <h1 className="hero__title"><span>Kwabo.</span><span>Bienvenue.</span><span>Welcome.</span></h1>
+          <h1 className="hero__title">
+            <span>Kwabo.</span><span>Bienvenue.</span><span>Welcome.</span>
+            <small className="hero__kicker">Maison d&apos;hôtes &amp; salle de conférence à Cotonou</small>
+          </h1>
           <p className="hero__lead">
             Une maison d&apos;hôtes à taille humaine au cœur de Cotonou&nbsp;: des chambres calmes, une table béninoise généreuse et une salle pour vos réunions — à deux pas de l&apos;aéroport.
           </p>
@@ -178,6 +207,24 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Questions fréquentes */}
+      <section className="section section--sand" aria-labelledby="faq-t">
+        <div className="wrap split">
+          <div>
+            <h2 id="faq-t">Questions fréquentes</h2>
+            <p className="lead">Tout ce qu&apos;il faut savoir avant votre séjour à Cotonou. Une autre question ? Écrivez-nous sur WhatsApp.</p>
+          </div>
+          <div className="acc" style={{ marginTop: 0 }}>
+            {faq.map((f, i) => (
+              <details key={f.q} open={i === 0}>
+                <summary>{f.q}<Plus /></summary>
+                <div><p>{f.a}</p></div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="wrap section--tight" style={{ paddingBottom: 'clamp(64px,8vw,110px)', textAlign: 'center' }}>
         <h2>Prêt pour votre séjour à Cotonou&nbsp;?</h2>

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getSettings } from '@/lib/settings';
 
-export const metadata: Metadata = { title: 'Politique de confidentialité', robots: { index: false } };
+export const metadata: Metadata = { title: 'Politique de confidentialité', robots: { index: false }, alternates: { canonical: '/confidentialite' } };
 
 export default async function PrivacyPage() {
   const s = await getSettings();

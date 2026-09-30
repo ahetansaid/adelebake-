@@ -6,18 +6,40 @@ import { IMG } from '@/content/images';
 import { publishedExperiences } from '@/lib/content';
 import { fcfa } from '@/lib/format';
 import { mediaUrl } from '@/lib/media-url';
+import { absolute, businessRef, ldJson } from '@/lib/seo';
 import { getSettings, whatsappLink } from '@/lib/settings';
 
 export const revalidate = 300;
 export const metadata: Metadata = {
-  title: 'Découvrir le Bénin',
-  description: 'Ganvié, Ouidah, marché Dantokpa : excursions organisées depuis Adélé Baké, avec des guides de confiance.',
+  title: 'Excursions à Ganvié, Ouidah et Cotonou',
+  description: "Visitez Ganvié, la cité lacustre, la Route des Esclaves à Ouidah et le marché Dantokpa avec des guides de confiance, au départ d'Adélé Baké à Cotonou.",
+  alternates: { canonical: '/decouvrir' },
 };
 
 export default async function DiscoverPage() {
   const [items, s] = await Promise.all([publishedExperiences(), getSettings()]);
+  const tripsLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Excursions au départ d’Adélé Baké, Cotonou',
+    itemListElement: items.map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'TouristTrip',
+        name: e.title,
+        description: e.summary,
+        url: absolute(`/decouvrir#${e.slug}`),
+        ...(e.imageId ? { image: absolute(`/media/${e.imageId}`) } : {}),
+        touristType: ['Voyageurs', 'Familles', 'Groupes'],
+        provider: businessRef(),
+        ...(e.price ? { offers: { '@type': 'Offer', price: e.price, priceCurrency: 'XOF' } } : {}),
+      },
+    })),
+  };
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(tripsLd)} />
       <PageHero
         title="Découvrir le Bénin"
         lead="Cité lacustre, route des Esclaves, grands marchés : nous organisons vos sorties avec des guides de confiance."

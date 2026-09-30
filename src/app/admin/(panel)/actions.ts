@@ -308,6 +308,11 @@ export async function saveSettings(_p: ActionState, f: FormData): Promise<Action
     const v = text(f, k);
     if (v && !/^https:\/\//.test(v)) return { error: 'Les liens doivent commencer par https://' };
   }
+  const lat = text(f, 'latitude').replace(',', '.');
+  const lng = text(f, 'longitude').replace(',', '.');
+  if ((lat && !(Math.abs(Number(lat)) <= 90)) || (lng && !(Math.abs(Number(lng)) <= 180))) {
+    return { error: 'Coordonnées GPS invalides (ex. latitude 6.3571, longitude 2.3902).' };
+  }
   await db.$transaction(
     keys.map((key) => {
       const value = text(f, key).slice(0, 500);

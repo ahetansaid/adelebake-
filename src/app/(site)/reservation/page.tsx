@@ -7,8 +7,9 @@ import { publishedRooms, todayIso } from '@/lib/content';
 import { getSettings, whatsappLink } from '@/lib/settings';
 
 export const metadata: Metadata = {
-  title: 'Réserver',
-  description: 'Demandez vos dates : nous confirmons la disponibilité et le tarif, et venons vous chercher à l’aéroport de Cotonou.',
+  title: 'Réserver une chambre',
+  description: "Demandez vos dates en 2 minutes : nous confirmons la disponibilité et le tarif, et venons vous chercher gratuitement à l'aéroport de Cotonou.",
+  alternates: { canonical: '/reservation' },
 };
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };

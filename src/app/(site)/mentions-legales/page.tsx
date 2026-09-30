@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getSettings } from '@/lib/settings';
 
-export const metadata: Metadata = { title: 'Mentions légales', robots: { index: false } };
+export const metadata: Metadata = { title: 'Mentions légales', robots: { index: false }, alternates: { canonical: '/mentions-legales' } };
 
 export default async function LegalPage() {
   const s = await getSettings();

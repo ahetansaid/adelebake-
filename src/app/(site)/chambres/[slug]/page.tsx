@@ -10,6 +10,7 @@ import { publishedRooms } from '@/lib/content';
 import { db } from '@/lib/db';
 import { fcfa } from '@/lib/format';
 import { mediaUrl } from '@/lib/media-url';
+import { absolute, businessRef, ldJson } from '@/lib/seo';
 import { getSettings, whatsappLink } from '@/lib/settings';
 
 export const revalidate = 300;
@@ -32,9 +33,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const room = await getRoom((await params).slug);
   if (!room) return {};
   return {
-    title: room.name,
-    description: room.summary,
-    openGraph: room.coverId ? { images: [{ url: `/media/${room.coverId}` }] } : undefined,
+    title: `${room.name} — dès ${fcfa(room.pricePerNight)} la nuit`,
+    description: `${room.summary} ${room.capacity} pers., ${room.bedType.toLowerCase()}, climatisation, Wi-Fi, petit-déjeuner et navette aéroport à Cotonou.`.slice(0, 160),
+    alternates: { canonical: `/chambres/${room.slug}` },
+    openGraph: room.coverId ? { images: [{ url: `/media/${room.coverId}`, alt: room.cover?.alt ?? room.name }] } : undefined,
   };
 }
 
@@ -49,8 +51,32 @@ export default async function RoomPage({ params }: Props) {
   ].slice(0, 3);
   const others = all.filter((r) => r.id !== room.id).slice(0, 3);
 
+  // Chambre + offre (prix indicatif) : permet à Google d'afficher le tarif
+  const roomLd = {
+    '@context': 'https://schema.org',
+    '@type': 'HotelRoom',
+    name: room.name,
+    description: room.summary,
+    url: absolute(`/chambres/${room.slug}`),
+    image: photos.map((p) => absolute(`/media/${p.id}`)),
+    bed: { '@type': 'BedDetails', typeOfBed: room.bedType },
+    occupancy: { '@type': 'QuantitativeValue', maxValue: room.capacity },
+    ...(room.sizeM2 ? { floorSize: { '@type': 'QuantitativeValue', value: room.sizeM2, unitCode: 'MTK' } } : {}),
+    amenityFeature: room.amenities.map((a) => ({ '@type': 'LocationFeatureSpecification', name: a, value: true })),
+    containedInPlace: businessRef(),
+    offers: {
+      '@type': 'Offer',
+      price: room.pricePerNight,
+      priceCurrency: 'XOF',
+      availability: 'https://schema.org/InStock',
+      url: absolute(`/reservation?chambre=${room.id}`),
+      priceSpecification: { '@type': 'UnitPriceSpecification', price: room.pricePerNight, priceCurrency: 'XOF', unitText: 'nuit' },
+    },
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={ldJson(roomLd)} />
       <PageHero
         title={room.name}
         lead={room.summary}

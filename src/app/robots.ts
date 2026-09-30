@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
   // Tant que le site n'est pas officiellement en ligne, ALLOW_INDEXING reste absent : aucun référencement.
   if (process.env.ALLOW_INDEXING !== 'true') return { rules: { userAgent: '*', disallow: '/' } };
   return {
-    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/media/'] },
+    rules: { userAgent: '*', allow: '/', disallow: ['/admin'] },
     sitemap: `${base}/sitemap.xml`,
   };
 }
