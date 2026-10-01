@@ -48,7 +48,7 @@ export function HeroSlider({ slides }: { slides: readonly Slide[] }) {
       <div className="hero__shade" />
       <div className="hero__thumbs" role="tablist" aria-label="Choisir une vue" style={{ ['--dur' as string]: `${DUR}ms` }}>
         {slides.map((s, i) => (
-          <button key={s.src} role="tab" aria-selected={i === cur} onClick={() => go(i)}>
+          <button key={s.src} role="tab" aria-selected={i === cur} aria-label={`Afficher : ${s.label}`} onClick={() => go(i)}>
             <Image src={s.src} alt="" fill sizes="128px" />
             <span>{s.label}</span>
           </button>

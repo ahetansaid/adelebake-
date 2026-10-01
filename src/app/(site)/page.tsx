@@ -199,7 +199,7 @@ export default async function HomePage() {
               const src = mediaUrl(e.imageId);
               return (
                 <Link key={e.id} className="spot" href={`/decouvrir#${e.slug}`}>
-                  {src && <Image src={src} alt={e.title} fill sizes="(max-width: 960px) 100vw, 33vw" />}
+                  {src && <Image src={src} alt={e.image?.alt ?? e.title} fill sizes="(max-width: 960px) 100vw, 33vw" />}
                   <span><b>{e.title}</b>{e.summary}</span>
                 </Link>
               );

@@ -26,7 +26,7 @@ export function publishedTestimonials() {
 }
 
 export function publishedExperiences(take?: number) {
-  return db.experience.findMany({ where: { published: true }, orderBy: { sortOrder: 'asc' }, take });
+  return db.experience.findMany({ where: { published: true }, orderBy: { sortOrder: 'asc' }, take, include: { image: { select: { alt: true } } } });
 }
 
 export async function menuBySection() {
