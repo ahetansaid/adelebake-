@@ -4,9 +4,15 @@
   "regions": ["fra1"],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [{ "type": "host", "value": "www.adelebake.com" }],
-      "destination": "https://adelebake.com/:path*",
+      "destination": "https://adelebake.com/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+",
+      "has": [{ "type": "host", "value": "www.adelebake.com" }],
+      "destination": "https://adelebake.com/:path+",
       "permanent": true
     }
   ]
