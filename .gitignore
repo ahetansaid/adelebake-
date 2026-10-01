@@ -1,2 +1,6 @@
-.vercel
+# Archive statique : aucun artefact de build ni secret
+node_modules/
+.next/
 .env*
+.vercel
+*.log
