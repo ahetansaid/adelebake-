@@ -3,7 +3,7 @@
 Site de la guesthouse **Adélé Baké** (Cotonou, Bénin) : présentation des chambres, restaurant, salle de conférence,
 excursions, demandes de réservation et de devis — avec un **espace de gestion** (`/admin`) pour l'équipe.
 
-Design : proposition 1 « Signature » (cuivre + indigo), maquette d'origine dans [`docs/maquette-v1/`](docs/maquette-v1/).
+Design : proposition 1 « Signature » (cuivre + indigo), les trois maquettes d'origine sont archivées sur la branche **`maquettes`** (non déployable).
 
 ## Stack
 
