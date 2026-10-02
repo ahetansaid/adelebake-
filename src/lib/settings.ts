@@ -5,8 +5,8 @@ import { db } from './db';
 export const SETTING_DEFAULTS = {
   phone: '+229 01 62 25 21 94',
   whatsapp: '2290162252194',
-  email: 'contact@adelebake.com',
-  notifyEmail: 'contact@adelebake.com',
+  email: 'adelebake@gmail.com',
+  notifyEmail: 'adelebake@gmail.com',
   address: "Quartier de l'aéroport, Cotonou, Bénin",
   airportDistance: "≈ 2 km de l'aéroport de Cotonou",
   receptionHours: 'Tous les jours, de 7 h à 23 h',

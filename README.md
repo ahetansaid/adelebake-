@@ -85,8 +85,9 @@ mêmes nom/adresse/téléphone que le site, photos, lien vers le site, avis clie
 3. Passer `SITE_URL=https://adelebake.com`, `ALLOW_INDEXING=true`, redéployer ; soumettre le sitemap à Search Console.
 4. Contrôle : `curl -I https://adelebake.com` et `https://www.adelebake.com` (redirection 308).
 
-**Messagerie** : le domaine n'a aucun MX — `contact@adelebake.com` ne reçoit rien tant qu'une messagerie n'est pas créée
-(Google Workspace, Zoho…) avec MX/SPF/DKIM/DMARC ; renseigner ensuite `SMTP_*` et `MAIL_FROM` sur Vercel.
+**Messagerie** : adresse actuelle de l'établissement **`adelebake@gmail.com`** (affichée sur le site et destinataire
+des demandes, réglage *Coordonnées & infos*). Le domaine n'a aucun MX : `contact@adelebake.com` ne reçoit rien tant
+qu'une messagerie n'est pas créée (Google Workspace via Wix, Zoho…) avec MX/SPF/DKIM/DMARC.
 
 ## Contenus à valider avec l'établissement
 
